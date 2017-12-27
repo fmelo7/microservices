@@ -2,8 +2,11 @@ spring:
   application:
     name: registration-server
 eureka:
+  instance:
+    hostname: localhost
+    preferIpAddress: true
   client:
     registerWithEureka: false
     fetchRegistry: false
 server:
-  port: 1111
+  port: 8761
