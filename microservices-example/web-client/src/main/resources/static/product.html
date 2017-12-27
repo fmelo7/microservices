@@ -19,7 +19,7 @@
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">web client</a>
+				<a class="navbar-brand" href="/">Web Shop</a>
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="/">Home</a></li>
@@ -29,6 +29,8 @@
 		</div>
 	</nav>
 	<div class="container">
+		<div id="messages" class="alert">
+		</div>
 		<div class="panel panel-default">
 			<div class="panel-heading">Products</div>
 			<div class="panel-body">
@@ -74,10 +76,22 @@
 						$('<td></td>').text(item.id).appendTo(tempRow);
 						tbody.append(tempRow);
 					})
+					$("#messages").removeClass();
+					$("#messages").addClass("alert alert-success");
+					$("#messages").append("<strong>Success!</strong> <span>Indicates a successful or positive action.</span>");
+					$("#messages").show();
+					setTimeout(function(){ $("#messages").hide(); }, 10000);
 				},
 				error : function(x, a, t) {
 					console.log(x.status);
-					console.log(x.responseText);
+					var response = JSON.parse(x.responseText);
+					$("#messages").removeClass();
+					$("#messages").empty();
+					$("#messages").addClass("alert alert-danger");
+					$("#messages").append("<strong>Error "+x.status+"!</strong> <span>"+response.message+"</span>");
+					$("#messages").show();
+					console.log($("#messages"));
+					setTimeout(function(){ $("#messages").hide(); }, 10000);
 				}
 			})
 		});
