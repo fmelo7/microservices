@@ -23,20 +23,20 @@
 			</div>
 			<ul class="nav navbar-nav">
 				<li><a href="/">Home</a></li>
-				<li class="active"><a href="customer.html">Customer</a></li>
-				<li><a href="product.html">Product</a></li>
+				<li><a href="customer.html">Customer</a></li>
+				<li class="active"><a href="product.html">Product</a></li>
 			</ul>
 		</div>
 	</nav>
 	<div class="container">
 		<div class="panel panel-default">
-			<div class="panel-heading">Customers</div>
+			<div class="panel-heading">Products</div>
 			<div class="panel-body">
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>Firstname</th>
-							<th>Lastname</th>
+							<th>Name</th>
+							<th>Price</th>
 							<th>Id</th>
 						</tr>
 					</thead>
@@ -59,7 +59,7 @@
 	<script type="text/javascript">
 		$("#request-data").click(function() {
 			$.ajax({
-				url : "http://localhost:8080/customers",
+				url : "http://localhost:8080/products",
 				success : function(result) {
 					console.log(result);
 					var tbody = $(".table-body");
@@ -69,8 +69,8 @@
 					row.empty();
 					result.forEach(function(item) {
 						var tempRow = row.clone();
-						$('<td></td>').text(item.firstname).appendTo(tempRow);
-						$('<td></td>').text(item.lastname).appendTo(tempRow);
+						$('<td></td>').text(item.name).appendTo(tempRow);
+						$('<td></td>').text(item.price).appendTo(tempRow);
 						$('<td></td>').text(item.id).appendTo(tempRow);
 						tbody.append(tempRow);
 					})
