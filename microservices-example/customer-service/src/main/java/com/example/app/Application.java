@@ -24,12 +24,12 @@ public class Application {
 	@Bean
 	CommandLineRunner runner() {
 		return args -> {
-			customerRepository.save(new Customer());
-			customerRepository.save(new Customer());
-			customerRepository.save(new Customer());
-			customerRepository.save(new Customer());
-			customerRepository.save(new Customer());
-			customerRepository.save(new Customer());
+			customerRepository.save(new Customer("john", "Doe"));
+			customerRepository.save(new Customer("jose", "silva"));
+			customerRepository.save(new Customer("paul", "smith"));
+			customerRepository.save(new Customer("ringo", "star"));
+			customerRepository.save(new Customer("simon", "garf"));
+			customerRepository.save(new Customer("peter", "framp"));
 		};
 	}
 }

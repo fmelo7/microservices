@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: web-client
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:1111/eureka

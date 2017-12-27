@@ -13,14 +13,14 @@ import com.example.app.vo.Customer;
 @Service
 public class CustomerWebService {
 
-	private static final String CUSTOMER_SERVICE_URL = "http://CUSTOMER-SERVICE";
+	private static final String CUSTOMER_SERVICE_URL = "http://CUSTOMER-SERVICE/customers/api/v1";
 
 	@Autowired
 	@LoadBalanced
 	protected RestTemplate restTemplate;
 
 	public List<Customer> getAll() {
-		return Arrays.asList(restTemplate.getForObject(CUSTOMER_SERVICE_URL + "/customers", Customer[].class));
+		return Arrays.asList(restTemplate.getForObject(CUSTOMER_SERVICE_URL, Customer[].class));
 	}
 
 }
