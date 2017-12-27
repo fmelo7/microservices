@@ -9,6 +9,7 @@
 	<modules>
 		<module>registration-server/pom.xml</module>
 		<module>customer-service/pom.xml</module>
+		<module>product-service/pom.xml</module>
 		<module>web-client/pom.xml</module>
 	</modules>
 </project>
