@@ -12,7 +12,7 @@ import com.example.app.entity.Product;
 import com.example.app.repository.ProductRepository;
 
 @Controller
-@RequestMapping("products/api/v1")
+@RequestMapping("/api/products/v1")
 public class ProductController {
 
 	@Autowired

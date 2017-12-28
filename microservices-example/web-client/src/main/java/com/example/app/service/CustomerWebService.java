@@ -13,7 +13,7 @@ import com.example.app.vo.Customer;
 @Service
 public class CustomerWebService {
 
-	private static final String SERVICE_URL = "http://CUSTOMER-SERVICE/customers/api/v1";
+	private static final String SERVICE_URL = "http://CUSTOMER-SERVICE/api/customers/v1";
 
 	@Autowired
 	@LoadBalanced
