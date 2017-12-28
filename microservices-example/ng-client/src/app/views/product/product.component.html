@@ -1,0 +1,17 @@
+<table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+        <th scope="col">#Id</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of result">
+        <td>{{item.name}}</td>
+        <td>{{item.price | currency}}</td>
+        <td>{{item.id}}</td>
+      </tr>
+    </tbody>
+  </table>
+  
