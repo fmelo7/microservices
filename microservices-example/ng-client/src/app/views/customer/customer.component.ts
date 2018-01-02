@@ -14,7 +14,7 @@ export class CustomerComponent implements OnInit {
 
   ngOnInit() {
     this.http
-      .get('http://localhost:2222/api/customers/v1')
+      .get('http://localhost:8080/customers')
       .subscribe(
       data => {
         console.log(data);

@@ -6,19 +6,22 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.stream.annotation.EnableBinding;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpMethod;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @EnableBinding(ProductSource.class)
 public class ProductWebService {
 
-    private static String SERVICE_URL = "http://PRODUCT-SERVICE/api/v1/products";
+    private static String SERVICE_URL = "http://PRODUCT-SERVICE/products";
 
     @Autowired
     @LoadBalanced
@@ -33,7 +36,17 @@ public class ProductWebService {
 
     @HystrixCommand(fallbackMethod = "getAllFallback")
     public List<Product> getAll() {
-        return Arrays.asList(restTemplate.getForObject(SERVICE_URL, Product[].class));
+        return restTemplate
+                .exchange(
+                        SERVICE_URL,
+                        HttpMethod.GET,
+                        null,
+                        new ParameterizedTypeReference<Resources<Product>>() {
+                        })
+                .getBody()
+                .getContent()
+                .stream()
+                .collect(Collectors.toList());
     }
 
     public void addProduct(Product product) {

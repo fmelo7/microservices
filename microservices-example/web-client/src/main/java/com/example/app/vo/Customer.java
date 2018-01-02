@@ -1,8 +1,5 @@
 package com.example.app.vo;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
-
-@JsonRootName("customer")
 public class Customer {
 
     private String id;

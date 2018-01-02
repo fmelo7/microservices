@@ -8,10 +8,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.integration.config.EnableIntegration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -26,13 +26,12 @@ public class CustomerServiceApplication {
     private CustomerRepository customerRepository;
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
+    public RepositoryRestConfigurer repositoryRestConfigurer() {
+        return new RepositoryRestConfigurerAdapter() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry //
-                        .addMapping("/api/v1/customers")//
-                        .allowedOrigins("http://localhost:4200");
+            public void configureRepositoryRestConfiguration(
+                    RepositoryRestConfiguration config) {
+                config.exposeIdsFor(Customer.class);
             }
         };
     }

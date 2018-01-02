@@ -1,10 +1,12 @@
 package com.example.app.repository;
 
 import com.example.app.entity.Customer;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-@Repository
-public interface CustomerRepository extends JpaRepository<Customer, Long> {
+import java.util.UUID;
+
+@RepositoryRestResource
+public interface CustomerRepository extends PagingAndSortingRepository<Customer, UUID> {
 
 }

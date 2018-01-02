@@ -10,6 +10,11 @@
     <name>registration-server</name>
     <description>registration server</description>
 
+    <modules>
+        <module>../customer-service/pom.xml</module>
+        <module>../product-service/pom.xml</module>
+    </modules>
+
     <parent>
         <groupId>microservices-example</groupId>
         <artifactId>microservices-example</artifactId>
