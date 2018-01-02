@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -21,22 +20,17 @@ public class CustomerController {
     @Autowired
     private CustomerWebService service;
 
-    @PostMapping
-    @HystrixCommand
-    private String addCustomer(@RequestBody Customer customer) {
-        service.addCustomer(customer);
-        return "index-static";
-    }
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @HystrixCommand(fallbackMethod = "getAllFallback")
+    @HystrixCommand
     List<Customer> getAll() {
         return service.getAll();
     }
 
-    public List<Customer> getAllFallback() {
-        logger.error("Error get all customers!");
-        return Collections.EMPTY_LIST;
+    @PostMapping
+    @HystrixCommand
+    public String addCustomer(@RequestBody Customer customer) {
+        service.addCustomer(customer);
+        return "index-static";
     }
 
     // TODO others methods restfull API

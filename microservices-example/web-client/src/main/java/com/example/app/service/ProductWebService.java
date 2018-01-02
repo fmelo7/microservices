@@ -49,6 +49,7 @@ public class ProductWebService {
                 .collect(Collectors.toList());
     }
 
+    @HystrixCommand
     public void addProduct(Product product) {
         source.addProduct().send(MessageBuilder.withPayload(product.toString()).build());
     }

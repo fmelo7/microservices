@@ -11,6 +11,14 @@ public class Product {
     private String name;
     private BigDecimal price;
 
+    public Product() {
+    }
+
+    public Product(String name, double price) {
+        this.name = name;
+        this.price = BigDecimal.valueOf(price);
+    }
+
     public String getId() {
         return id;
     }

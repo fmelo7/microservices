@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @EnableBinding(CustomerSource.class)
 public class CustomerWebService {
 
-    private static String SERVICE_URL = "http://CUSTOMER-SERVICE/customers";
+    public static String SERVICE_URL = "http://CUSTOMER-SERVICE/customers";
 
     @Autowired
     @LoadBalanced
@@ -34,7 +34,7 @@ public class CustomerWebService {
         return Collections.emptyList();
     }
 
-    @HystrixCommand(fallbackMethod = "getAllFallback")
+    //@HystrixCommand(fallbackMethod = "getAllFallback")
     public List<Customer> getAll() {
         return restTemplate
                 .exchange(
@@ -49,6 +49,7 @@ public class CustomerWebService {
                 .collect(Collectors.toList());
     }
 
+    @HystrixCommand
     public void addCustomer(Customer customer) {
         source.addCustomer().send(MessageBuilder.withPayload(customer.toString()).build());
     }
