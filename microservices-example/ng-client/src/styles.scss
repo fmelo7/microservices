@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+
+// setup color variables before bootstrap
+// $primary: #F05F40;
+// $secondary: #2dca98;
+// $dark:#333;
+// $light:#ccc;
+// $primary: #DBCDAD;
+// $secondary: #B29C7D;
+// $dark:#7F6854;
+// $light:#FFF5CF;
+// $accent: #A8BAA9;
+//p: DBCDAD
+//s: B29C7D
+//d: 7F6854
+//l: FFF5CF
+//a: A8BAA9
+
+// setup fonts
+@import url(https://fonts.googleapis.com/css?family=Libre+Baskerville|Raleway|Roboto|Spectral+SC);
+// use in css 
+// font-family: 'Spectral SC', serif;
+// font-family: 'Libre Baskerville', serif;
+// font-family: 'Roboto', sans-serif;
+// font-family: 'Raleway', sans-serif;
+
+// Required
+// @import "~bootstrap/scss/functions";
+// @import "~bootstrap/scss/variables";
+// @import "~bootstrap/scss/mixins";
+// Optional
+// @import "~bootstrap/scss/reboot";
+// @import "~bootstrap/scss/type";
+// @import "~bootstrap/scss/images";
+// @import "~bootstrap/scss/code";
+// @import "~bootstrap/scss/grid";
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+// Custom Theme
+@import "~assets/theme/custom";
+// Font Awesome
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
