@@ -1,4 +1,4 @@
-package com.example.app.customer.vo;
+package com.example.app.webclient.vo;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 

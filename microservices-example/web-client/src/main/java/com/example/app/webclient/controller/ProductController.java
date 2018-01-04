@@ -1,7 +1,7 @@
-package com.example.app.customer.controller;
+package com.example.app.webclient.controller;
 
-import com.example.app.customer.service.ProductWebService;
-import com.example.app.customer.vo.Product;
+import com.example.app.webclient.service.ProductWebService;
+import com.example.app.webclient.vo.Product;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@CrossOrigin({"http://localhost:4200"})
 public class ProductController {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

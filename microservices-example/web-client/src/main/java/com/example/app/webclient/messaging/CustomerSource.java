@@ -1,4 +1,4 @@
-package com.example.app.customer.messaging;
+package com.example.app.webclient.messaging;
 
 import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;

@@ -1,4 +1,4 @@
-package com.example.app.customer;
+package com.example.app.webclient;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +13,7 @@ import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.Arrays;
 
@@ -23,22 +21,11 @@ import java.util.Arrays;
 @EnableDiscoveryClient
 @EnableZuulProxy
 @EnableCircuitBreaker
+@EnableWebMvc
 public class WebClientApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WebClientApplication.class, args);
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry //
-                        .addMapping("/api/v1/**")//
-                        .allowedOrigins("http://localhost:4200");
-            }
-        };
     }
 
     @LoadBalanced

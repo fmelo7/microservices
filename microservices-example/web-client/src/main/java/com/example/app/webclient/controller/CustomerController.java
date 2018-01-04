@@ -1,7 +1,7 @@
-package com.example.app.customer.controller;
+package com.example.app.webclient.controller;
 
-import com.example.app.customer.service.CustomerWebService;
-import com.example.app.customer.vo.Customer;
+import com.example.app.webclient.service.CustomerWebService;
+import com.example.app.webclient.vo.Customer;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customers")
+@CrossOrigin({"http://localhost:4200"})
 public class CustomerController {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -29,8 +30,11 @@ public class CustomerController {
     @PostMapping
     @HystrixCommand
     public String addCustomer(@RequestBody Customer customer) {
-        service.addCustomer(customer);
-        return "index-static";
+        if (service.addCustomer(customer)){
+            return "index-static";
+        }
+        // TODO error message for add object on rabbitmq
+        return "error";
     }
 
     // TODO others methods restfull API

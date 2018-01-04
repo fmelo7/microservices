@@ -14,7 +14,7 @@ export class ProductComponent implements OnInit {
 
   ngOnInit() {
     this.http
-      .get('http://localhost:8080/products')
+      .get('http://localhost:8080/api/v1/products')
       .subscribe(
       data => {
         console.log(data);

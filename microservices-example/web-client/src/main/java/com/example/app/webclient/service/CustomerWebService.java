@@ -1,10 +1,9 @@
-package com.example.app.customer.service;
+package com.example.app.webclient.service;
 
-import com.example.app.customer.messaging.CustomerSource;
-import com.example.app.customer.vo.Customer;
+import com.example.app.webclient.messaging.CustomerSource;
+import com.example.app.webclient.vo.Customer;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.Resources;
@@ -23,18 +22,24 @@ public class CustomerWebService {
 
     public static String SERVICE_URL = "http://CUSTOMER-SERVICE/customers";
 
-    @Autowired
-    @LoadBalanced
     protected RestTemplate restTemplate;
 
-    @Autowired
     private CustomerSource source;
+
+    public CustomerWebService() {
+    }
+
+    @Autowired
+    public CustomerWebService(RestTemplate restTemplate, CustomerSource source) {
+        this.restTemplate = restTemplate;
+        this.source = source;
+    }
 
     public List<Customer> getAllFallback() {
         return Collections.emptyList();
     }
 
-    //@HystrixCommand(fallbackMethod = "getAllFallback")
+    @HystrixCommand(fallbackMethod = "getAllFallback")
     public List<Customer> getAll() {
         return restTemplate
                 .exchange(
@@ -50,7 +55,7 @@ public class CustomerWebService {
     }
 
     @HystrixCommand
-    public void addCustomer(Customer customer) {
-        source.addCustomer().send(MessageBuilder.withPayload(customer.toString()).build());
+    public boolean addCustomer(Customer customer) {
+        return source.addCustomer().send(MessageBuilder.withPayload(customer.toString()).build());
     }
 }
