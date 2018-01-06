@@ -15,13 +15,16 @@ public class CustomerServiceApplicationTests {
     CustomerSink customerSink;
 
     @Autowired
+    CustomerProcessor customerProcessor;
+
+    @Autowired
     CustomerRepository repository;
 
     @Test
     public void contextLoads() {
-        Assertions.assertThat(customerSink.addCustomer()).isNotNull();
-        Assertions.assertThat(repository.findAll()).isNotNull();
+        Assertions.assertThat(customerSink).isNotNull();
+        Assertions.assertThat(customerProcessor).isNotNull();
+        Assertions.assertThat(repository).isNotNull();
         Assertions.assertThat(new Customer()).isNotNull();
     }
-
 }

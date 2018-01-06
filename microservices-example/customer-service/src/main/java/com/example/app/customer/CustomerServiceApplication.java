@@ -1,5 +1,6 @@
 package com.example.app.customer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -8,16 +9,16 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.messaging.SubscribableChannel;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -29,6 +30,7 @@ public class CustomerServiceApplication {
         SpringApplication.run(CustomerServiceApplication.class, args);
     }
 
+    // TODO create profile dev using H2 and prod using mongodb:
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -49,13 +51,18 @@ public class CustomerServiceApplication {
 @EnableBinding(CustomerSink.class)
 class CustomerProcessor {
 
-    @Autowired
     private CustomerRepository repository;
 
+    @Autowired
+    public CustomerProcessor(CustomerRepository repository) {
+        this.repository = repository;
+    }
+
     @ServiceActivator(inputChannel = CustomerSink.ADD_CUSTOMER)
-    public Customer addCustomer(String customer) {
-        // TODO eval customer from string json to map or something else...
-        return repository.save(new Customer());
+    public Customer addCustomer(String customer) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Customer newCustomer = objectMapper.readValue(customer, Customer.class);
+        return repository.save(newCustomer);
     }
 }
 
@@ -67,7 +74,18 @@ interface CustomerSink {
 }
 
 @RestResource
-interface CustomerRepository extends JpaRepository<Customer, UUID> {
+interface CustomerRepository extends CrudRepository<Customer, UUID> {
+
+    @Override
+    default void delete(Customer entity) {
+        entity.setDeleted(true);
+        save(entity);
+    }
+
+    @Override
+    default void delete(UUID uuid) {
+        delete(findOne(uuid));
+    }
 }
 
 @Entity
@@ -76,8 +94,23 @@ class Customer {
     @Id
     @GeneratedValue
     private UUID _id;
+
+    @Column(nullable = false, length = 50)
     private String firstname;
+
+    @Column(nullable = false, length = 50)
     private String lastname;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(insertable = false)
+    private Date dateCreate;
+
+    private Date dateUpdate;
+
+    private Date dateDelete;
+
+    @Column(nullable = false)
+    private Boolean deleted = false;
 
     public Customer() {
     }
@@ -109,5 +142,43 @@ class Customer {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    public Date getDateUpdate() {
+        return dateUpdate;
+    }
+
+    public Date getDateDelete() {
+        return dateDelete;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+        this.dateDelete = onDelete(deleted);
+    }
+
+    private Date onDelete(boolean deleted) {
+        return deleted ? new Date() : null;
+    }
+
+    public Boolean isDeleted() {
+        return deleted;
+    }
+
+    @PrePersist
+    public void onPersist() {
+        dateCreate = new Date();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        if (deleted)
+            dateDelete = new Date();
+        else
+            dateUpdate = new Date();
     }
 }
