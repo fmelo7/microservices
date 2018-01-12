@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomerTest {
 
-    // customer table contrution
+    // customer table construction
     Customer customer;
 
     // some date to test

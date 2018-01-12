@@ -5,15 +5,11 @@
 
     <groupId>com.example.app</groupId>
     <artifactId>registration-server</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>registration-server</name>
     <description>registration server</description>
-
-    <modules>
-        <module>../customer-service/pom.xml</module>
-        <module>../product-service/pom.xml</module>
-    </modules>
 
     <parent>
         <groupId>microservices-example</groupId>

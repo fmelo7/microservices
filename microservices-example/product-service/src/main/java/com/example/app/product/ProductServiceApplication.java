@@ -8,17 +8,16 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.Input;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.messaging.SubscribableChannel;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -69,7 +68,18 @@ class ProductProcessor {
 
 
 @RepositoryRestResource
-interface ProductRepository extends PagingAndSortingRepository<Product, Long> {
+interface ProductRepository extends CrudRepository<Product, UUID> {
+    @Override
+    default void delete(UUID uuid) {
+        Product product = findOne(uuid);
+        delete(product);
+    }
+
+    @Override
+    default void delete(Product entity) {
+        entity.setDeleted(true);
+        save(entity);
+    }
 }
 
 @Entity
@@ -78,8 +88,25 @@ class Product {
     @Id
     @GeneratedValue
     private UUID _id;
+
+    @Column(nullable = false, length = 150)
     private String name;
+
+    @Column(nullable = false)
     private BigDecimal price;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(insertable = false)
+    private Date dateCreate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateUpdate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateDelete;
+
+    @Column(nullable = false)
+    private Boolean deleted = false;
 
     public Product() {
     }
@@ -113,4 +140,41 @@ class Product {
         this.price = price;
     }
 
+    public Date getDateCreate() {
+        return dateCreate;
+    }
+
+    public Date getDateUpdate() {
+        return dateUpdate;
+    }
+
+    public Date getDateDelete() {
+        return dateDelete;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+        this.dateDelete = onDelete(deleted);
+    }
+
+    private Date onDelete(boolean deleted) {
+        return deleted ? new Date() : null;
+    }
+
+    public Boolean isDeleted() {
+        return deleted;
+    }
+
+    @PrePersist
+    public void onPersist() {
+        dateCreate = new Date();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        if (deleted)
+            dateDelete = new Date();
+        else
+            dateUpdate = new Date();
+    }
 }

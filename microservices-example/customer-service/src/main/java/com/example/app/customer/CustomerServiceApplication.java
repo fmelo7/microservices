@@ -37,8 +37,6 @@ public class CustomerServiceApplication {
     @Bean
     CommandLineRunner runner() {
         return args -> {
-            customerRepository.save(new Customer("john", "Doe"));
-            customerRepository.save(new Customer("jose", "silva"));
             customerRepository.save(new Customer("paul", "smith"));
             customerRepository.save(new Customer("ringo", "star"));
             customerRepository.save(new Customer("simon", "garf"));
@@ -101,12 +99,14 @@ class Customer {
     @Column(nullable = false, length = 50)
     private String lastname;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(insertable = false)
+    //@Temporal(TemporalType.TIMESTAMP)
+    //@Column(insertable = false)
     private Date dateCreate;
 
+    //@Temporal(TemporalType.TIMESTAMP)
     private Date dateUpdate;
 
+    //@Temporal(TemporalType.TIMESTAMP)
     private Date dateDelete;
 
     @Column(nullable = false)
@@ -148,12 +148,24 @@ class Customer {
         return dateCreate;
     }
 
+    public void setDateCreate(Date dateCreate) {
+        this.dateCreate = dateCreate;
+    }
+
     public Date getDateUpdate() {
         return dateUpdate;
     }
 
+    public void setDateUpdate(Date dateUpdate) {
+        this.dateUpdate = dateUpdate;
+    }
+
     public Date getDateDelete() {
         return dateDelete;
+    }
+
+    public void setDateDelete(Date dateDelete) {
+        this.dateDelete = dateDelete;
     }
 
     public void setDeleted(boolean deleted) {
@@ -171,14 +183,27 @@ class Customer {
 
     @PrePersist
     public void onPersist() {
-        dateCreate = new Date();
+        setDateCreate(new Date());
     }
 
     @PreUpdate
     public void onUpdate() {
         if (deleted)
-            dateDelete = new Date();
+            setDateDelete(new Date());
         else
-            dateUpdate = new Date();
+            setDateUpdate(new Date());
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "_id=" + _id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", dateCreate=" + dateCreate +
+                ", dateUpdate=" + dateUpdate +
+                ", dateDelete=" + dateDelete +
+                ", deleted=" + deleted +
+                '}';
     }
 }

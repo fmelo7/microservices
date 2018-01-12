@@ -5,18 +5,28 @@
 
     <groupId>com.example.app</groupId>
     <artifactId>customer-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>customer-service</name>
     <description>customer service</description>
 
     <parent>
-        <groupId>com.example.app</groupId>
-        <artifactId>registration-server</artifactId>
+        <groupId>microservices-example</groupId>
+        <artifactId>microservices-example</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
