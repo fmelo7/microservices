@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"></meta>
+<title>web client</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+
+<!-- jQuery library -->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">Web Shop</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="/">Home</a></li>
+				<li class="active"><a href="customer">Customer</a></li>
+				<li><a href="product">Product</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container">
+		<div id="messages" class="alert">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">Customers</div>
+			<div class="panel-body">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Firstname</th>
+							<th>Lastname</th>
+							<th>Id</th>
+						</tr>
+					</thead>
+					<tbody class="table-body">
+						<tr class="customer-row">
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				<div id="div1"></div>
+			</div>
+			<div class="panel-footer">
+				<a id="request-data" class="btn btn-default">Request data</a>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$("#messages").hide();
+		$("#request-data").click(function() {
+			$.ajax({
+				url : "http://localhost:8080/customers",
+				success : function(result) {
+					console.log(result);
+					var tbody = $(".table-body");
+					tbody.empty();
+					result.forEach(function(item) {
+						var tempRow = $('<tr></tr>');
+						$('<td></td>').text(item.firstname).appendTo(tempRow);
+						$('<td></td>').text(item.lastname).appendTo(tempRow);
+						$('<td></td>').text(item.id).appendTo(tempRow);
+						tbody.append(tempRow);
+					})
+					$("#messages").removeClass();
+					$("#messages").empty();
+					$("#messages").addClass("alert alert-success");
+					$("#messages").append("<strong>Success!</strong> <span></span>");
+					$("#messages").show();
+					setTimeout(function(){ $("#messages").hide(); }, 10000);
+				},
+				error : function(x, a, t) {
+					console.log(x.status);
+					var response = JSON.parse(x.responseText);
+					$("#messages").removeClass();
+					$("#messages").empty();
+					$("#messages").addClass("alert alert-danger");
+					$("#messages").append("<strong>Error "+x.status+"!</strong> <span>"+response.message+"</span>");
+					$("#messages").show();
+					console.log($("#messages"));
+					setTimeout(function(){ $("#messages").hide(); }, 10000);
+				}
+			})
+		});
+	</script>
+</body>
+</html>

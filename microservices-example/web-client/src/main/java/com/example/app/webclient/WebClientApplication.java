@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -38,5 +40,24 @@ public class WebClientApplication {
         converter.setSupportedMediaTypes(MediaType.parseMediaTypes("application/hal+json"));
         converter.setObjectMapper(mapper);
         return new RestTemplate(Arrays.asList(converter));
+    }
+
+    @Controller
+    class NavController {
+
+        @RequestMapping("/")
+        public String index() {
+            return "index";
+        }
+
+        @RequestMapping("/customer")
+        public String customer() {
+            return "customer";
+        }
+
+        @RequestMapping("/product")
+        public String product() {
+            return "product";
+        }
     }
 }
