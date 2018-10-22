@@ -63,9 +63,9 @@
 		$("#messages").hide();
 		$("#request-data").click(function() {
 			$.ajax({
-				url : "http://localhost:8080/customers",
+				url : "http://localhost:8080/api/v1/customers",
 				success : function(result) {
-					console.log(result);
+					// console.log(result);
 					var tbody = $(".table-body");
 					tbody.empty();
 					result.forEach(function(item) {
@@ -83,7 +83,7 @@
 					setTimeout(function(){ $("#messages").hide(); }, 10000);
 				},
 				error : function(x, a, t) {
-					console.log(x.status);
+					// console.log(x.status);
 					var response = JSON.parse(x.responseText);
 					$("#messages").removeClass();
 					$("#messages").empty();
